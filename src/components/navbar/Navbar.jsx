@@ -1,38 +1,82 @@
-import "./navbar.css"
-import { Link } from 'react-router-dom';
+import "./navbar.css";
+import { Link } from "react-router-dom";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../context/AuthContext";
 
-const navbar = () => {
+const Navbar = () => {
+  const { user, dispatch } = useContext(AuthContext);
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+  
+    const handleLogout = () => {
+      dispatch({ type: "LOGOUT" });
+    };
+
   return (
-    <nav class="navbar">
-        <div class="navbar__container">
-            <a href="/" class="navbar__logo">
-                <img src="images/logofinal.png"/>
-            </a>
-            <div class="navbar__toggle" id="mobile-menu">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
+    <nav className="navbar">
+        <div className="navbar__container">
+        <Link to="/" className="navbar__logo">
+         <img src="images/logofinal.png" alt="Logo" />
+         </Link>
+
+            <div classN="navbar__toggle" id="mobile-menu">
+                <span className="bar"></span>
+                <span className="bar"></span>
+                <span className="bar"></span>
             </div>
-            <ul className="navbar__menu">
+      <ul className="navbar__menu">
       <li className="navbar__item">
-        <Link to="/" class="navbar__links">HOME</Link>
+        <Link to="/" className="navbar__links">HOME</Link>
       </li>
       <li className="navbar__item">
-        <Link to="/about" class="navbar__links">ABOUT</Link>
+        <Link to="/about" className="navbar__links">ABOUT</Link>
       </li>
       <li className="navbar__item">
-        <Link to="/contact" class="navbar__links">CONTACT</Link>
+        <Link to="/contact" className="navbar__links">CONTACT</Link>
       </li>
       <li className="navbar__item">
-        <Link to="/explore" class="navbar__links">EXPLORE</Link>
+        <Link to="/artists" className="navbar__links">EXPLORE</Link>
       </li>
     </ul>
-            <li class="navbar__btn">
-                <a href="login.html" class="button"> SignUp </a>
-            </li>
+    {user ? (
+       <div className="navbar__dropdown" 
+       onClick={toggleDropdown}>
+       <div className="username">{user.username}</div>
+       {isDropdownOpen && (
+        <div className="navbar__toggle">
+          <ul className="dropdown__menu">
+               <li className="dropdown__item" 
+               key="logout"
+               onClick={handleLogout}
+               >
+                Logout</li>
+           </ul>
+        </div>
+           
+       )}
+   </div>
+        ) : (
+          <>
+          <div className="navbutton">
+          <li className="navbar__btn">
+          <Link to="/login" className="button"> Login </Link>
+        </li>
+
+        <li className="navbar__rbtn">
+        <Link to="/register" className="button"> SignUp </Link>
+        </li>
+        </div>
+        
+      </>
+    )}
+
         </div>
     </nav>
   )
 }
 
-export default navbar
+export default Navbar;

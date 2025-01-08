@@ -1,10 +1,10 @@
 import Featured from "../../components/featured/Featured.jsx";
-import FeaturedProperties from "../../components/featuredProperties/FeaturedProperties.jsx";
+import FeaturedArtists from "../../components/featuredArtists/FeaturedArtists.jsx";
 import Footer from "../../components/footer/Footer.jsx";
 import Header from "../../components/header/Header.jsx";
 import MailList from "../../components/mailList/MailList.jsx";
 import Navbar from "../../components/navbar/Navbar.jsx";
-import PropertyList from "../../components/propertyList/PropertyList.jsx";
+import GenreList from "../../components/genreList/GenreList.jsx";
 import "./home.css";
 
 const Home = () => {
@@ -15,9 +15,9 @@ const Home = () => {
       <div className="homeContainer">
         <Featured/>
         <h1 className="homeTitle">Browse by genre.</h1>
-        <PropertyList/>
+        <GenreList/>
         <h1 className="homeTitle">Crowd picks.</h1>
-        <FeaturedProperties/>
+        <FeaturedArtists/>
         <MailList/>
         <Footer/>
       </div>

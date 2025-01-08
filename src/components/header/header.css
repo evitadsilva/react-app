@@ -25,6 +25,16 @@
   cursor: pointer;
 }
 
+.blink{
+  background-color: #BB2525;
+  color: white;
+  font-weight: 500;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
 .headerSearch {
   height: 30px;
   background-color: white;

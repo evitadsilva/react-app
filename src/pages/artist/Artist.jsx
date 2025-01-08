@@ -1,6 +1,5 @@
 import "./artist.css";
 import Navbar from "../../components/navbar/Navbar";
-import Header from "../../components/header/Header";
 import MailList from "../../components/mailList/MailList";
 import Footer from "../../components/footer/Footer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,35 +10,37 @@ import {
   faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import useFetch from "../../hooks/useFetch";
+import { SearchContext } from "../../context/SearchContext";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import Reserve from "../../components/reserve/Reserve";
 
 const Artist = () => {
+  const location = useLocation();
+  const id = location.pathname.split("/")[2];
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
+  const [openModel, setOpenModel] = useState(false); 
 
-  const photos = [
-    {
-      src: "https://i.pinimg.com/564x/d1/86/1d/d1861d9b430f2d4c50f62ad026c5a9d1.jpg",
-    },
-    {
-      src: "https://i.pinimg.com/564x/d1/86/1d/d1861d9b430f2d4c50f62ad026c5a9d1.jpg",
-    },
-    {
-      src: "https://i.pinimg.com/564x/d1/86/1d/d1861d9b430f2d4c50f62ad026c5a9d1.jpg",
-    },
-    {
-      src: "https://i.pinimg.com/564x/d1/86/1d/d1861d9b430f2d4c50f62ad026c5a9d1.jpg",
-    },
-    {
-      src: "https://i.pinimg.com/564x/d1/86/1d/d1861d9b430f2d4c50f62ad026c5a9d1.jpg",
-    },
-    {
-      src: "https://i.pinimg.com/564x/d1/86/1d/d1861d9b430f2d4c50f62ad026c5a9d1.jpg",
-    },
-  ];
+  const { data, loading } = useFetch(`/artists/find/${id}`)
+  const {user} = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const {dates} = useContext(SearchContext);
+
+  const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
+  function dayDifference(date1, date2) {
+    const timeDiff = Math.abs(date2.getTime() - date1.getTime());
+    const diffDays = Math.ceil(timeDiff / MILLISECONDS_PER_DAY);
+    return diffDays;
+  }
+
+  const days = dayDifference(dates[0].endDate, dates[0].startDate);
 
   const handleOpen = (i) => {
     setSlideNumber(i);
-    setOpen(true);
   };
 
   const handleMove = (direction) => {
@@ -54,10 +55,20 @@ const Artist = () => {
     setSlideNumber(newSlideNumber)
   };
 
+  const handleClick = ()=> {
+    if(user){
+      setOpenModel(true);
+    }
+    else{
+      navigate("/");
+    }
+  }
+
   return (
     <div>
-      <Navbar />
-      <Header type="list" />
+    
+      { loading ? ("loading...") : (
+      <>
       <div className="artistContainer">
         {open && (
           <div className="slider">
@@ -72,7 +83,9 @@ const Artist = () => {
               onClick={() => handleMove("l")}
             />
             <div className="sliderWrapper">
-              <img src={photos[slideNumber].src} alt="" className="sliderImg" />
+              <img src={data.photos[slideNumber]} 
+              alt="" 
+              className="sliderImg" />
             </div>
             <FontAwesomeIcon
               icon={faCircleArrowRight}
@@ -82,50 +95,51 @@ const Artist = () => {
           </div>
         )}
         <div className="artistWrapper">
-          <button className="bookNow">Hire Now!</button>
-          <h1 className="artistTitle">Olivier</h1>
+        <button className="bookNow">Book Now!</button>
+        {openModel && <Reserve setOpen={setOpenModel} artistid={id}/>}
+          <h1 className="artistTitle">{data.name}</h1>
           <div className="artistAddress">
             <FontAwesomeIcon icon={faLocationDot} />
-            <span>Mumbai</span>
+            <span>{data.city}</span>
+          </div>
+          <span className="artistPriceHighlight">
+              Book a show over ${data.cheapestPrice} for a night
+            </span>
+          <div className="artistDetails">
+            <div className="artistDetailsTexts">
+              <h1 className="artistTitle">Music style: {data.genre}</h1>
+              <p className="artistDesc">
+              {data.desc}
+              </p>
+            </div>
+            <div className="artistDetailsPrice">
+              <h1>Grove and sing along with {data.name}</h1>
+              <h2>
+                <b>${days * data.cheapestPrice || data.cheapestPrice} </b> 
+                ({days === 0 ? '1 show' : `${days} shows`}) 
+              </h2>
+              <button onClick={handleClick}>Book now!</button>
+            </div>
           </div>
           <div className="artistImages">
-            {photos.map((photo, i) => (
+            {data.photos?.map((photo, i) => (
               <div className="artistImgWrapper" key={i}>
                 <img
                   onClick={() => handleOpen(i)}
-                  src={photo.src}
+                  src={photo}
                   alt=""
                   className="artistImg"
                 />
               </div>
             ))}
           </div>
-          <div className="artistDetails">
-            <div className="artistDetailsTexts">
-              <h1 className="artistTitle">Stay in the heart of musically world.</h1>
-              <p className="artistDesc">
-              Born on planet Earth, I always love music: I remember when I was a 
-              child sitting in front of my father's -the picture with a man in a plane- gigantic 
-              Tannoy 15" dual concentric Gold Monitor and listening to music. My influence are Jean-Michel 
-              Jarre, Mike Oldfield's Tubular Bell, Harmonium, Talk Talk, Genesis, Yes, Pink Floyd, Tears for 
-              Fears, movies soundtrack, John Mclaughlin's Mahavisnu Orchestra, Eric Serra, Santana, Tito Puente,
-              Cuban percussion, Latin jazz, house, dance music and others. During the '80s and '90s, 
-              I saw my uncle's keyboard and synth set-up. A revelation!I knew I would fall in love with 
-              electronic music! Hope you like my music!
-              </p>
-            </div>
-            <div className="artistDetailsPrice">
-              <h1>Perfect to be hired for your events</h1>
-              <h2>
-                <b>Rs999</b> (1 night)
-              </h2>
-              <button>Book Now!</button>
-            </div>
-          </div>
         </div>
         <MailList />
         <Footer />
       </div>
+      </>
+       )}
+       {openModel && <Reserve setOpen={setOpenModel} artistid={id}/>}
     </div>
   );
 };
