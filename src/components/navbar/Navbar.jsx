@@ -61,12 +61,12 @@ const Navbar = () => {
    </div>
         ) : (
           <>
-          <div className="navbutton">
+        <div className="navbutton">
           <li className="navbar__btn">
           <Link to="/login" className="button"> Login </Link>
         </li>
 
-        <li className="navbar__rbtn">
+        <li className="navbar__btn">
         <Link to="/register" className="button"> SignUp </Link>
         </li>
         </div>
