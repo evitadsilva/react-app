@@ -103,7 +103,7 @@ const Artist = () => {
             <span>{data.city}</span>
           </div>
           <span className="artistPriceHighlight">
-              Book a show over ${data.cheapestPrice} for a night
+              Book a show over ₹{data.cheapestPrice} for a night
             </span>
           <div className="artistDetails">
             <div className="artistDetailsTexts">
@@ -115,7 +115,7 @@ const Artist = () => {
             <div className="artistDetailsPrice">
               <h1>Grove and sing along with {data.name}</h1>
               <h2>
-                <b>${days * data.cheapestPrice || data.cheapestPrice} </b> 
+                <b>₹{days * data.cheapestPrice || data.cheapestPrice} </b> 
                 ({days === 0 ? '1 show' : `${days} shows`}) 
               </h2>
               <button onClick={handleClick}>Book now!</button>
