@@ -26,7 +26,7 @@ const List = () => {
     reFetch();
   }
 
-  const {dispatch} = useContext(SearchContext)
+  //const {dispatch} = useContext(SearchContext)
 
   const [dates, setDates] = useState([
     {
@@ -36,10 +36,10 @@ const List = () => {
     },
   ]);
 
-  const [options] = useState({
+  /*const [options] = useState({
     person: 1,
     ticket: 1,
-  });
+  });*/
 
   const handlePersonChange = (e) => {
     const newPersonCount = parseInt(e.target.value);

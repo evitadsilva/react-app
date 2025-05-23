@@ -23,7 +23,7 @@ const Navbar = () => {
          <img src="images/logofinal.png" alt="Logo" />
          </Link>
 
-            <div classN="navbar__toggle" id="mobile-menu">
+            <div className="navbar__toggle" id="mobile-menu">
                 <span className="bar"></span>
                 <span className="bar"></span>
                 <span className="bar"></span>
